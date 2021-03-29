@@ -105,6 +105,8 @@ ENV/
 
 # JetBrains
 .idea/
-TRDWLL/settings/prod.py
 
 node_modules/
+
+data.json
+last_updated.txt
