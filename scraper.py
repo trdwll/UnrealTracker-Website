@@ -1,4 +1,4 @@
-import re, json, time, random
+import re, json, time, random, datetime
 from bs4 import BeautifulSoup
 import concurrent.futures
 from urllib.request import urlopen
@@ -13,6 +13,7 @@ content = []
 
 def download_url(url):
     resp = urlopen(url).read()
+    print(url)
     soup = BeautifulSoup(resp, 'html.parser')
     all_content = soup.find_all('div', {'class': 'asset-container catalog asset-full'})
     all_images = soup.find_all('img')
@@ -44,7 +45,6 @@ def download_items(store_urls):
         executor.map(download_url, store_urls)
 
 def main(store_urls):
-    # TODO: Delete the files
     t0 = time.time()
     download_items(store_urls)
     t1 = time.time()
@@ -58,23 +58,27 @@ def main(store_urls):
     t2 = time.time()
     print(f"{t1-t0} seconds to download {len(store_urls)} pages. {t2-t1} seconds to save the data.")
 
+    with open("last_updated.txt", "w") as fh:
+        fh.write(str(datetime.datetime.now()))
+
     # format the data to be able to be imported into mysql
 
 
+# format and set up the urls for the main method
 
-# text = urlopen('https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=0').read()
-# soup = BeautifulSoup(text, 'html.parser')
-# amount_content = soup.find('li', attrs={'class': 'rc-pagination-total-text'})
-# amount = re.search('([0-9]{5})', str(amount_content)).group(1)
-# amount_of_pages = int(amount) / 100 + 1
+text = urlopen('https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=0').read()
+soup = BeautifulSoup(text, 'html.parser')
+amount_content = soup.find('li', attrs={'class': 'rc-pagination-total-text'})
+amount = re.search('([0-9]{5})', str(amount_content)).group(1)
+amount_of_pages = int(amount) / 100 + 1
 
-# urls = []
-# for i in range(int(amount_of_pages)):
-#     start = i * 100
-#     urls.append('https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start={}'.format(start))
+urls = []
+for i in range(int(amount_of_pages)):
+    start = i * 100
+    urls.append('https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start={}'.format(start))
 
-# main(urls)
-main(['https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=0', 'https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=100'])
+main(urls)
+# main(['https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=0', 'https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=100'])
 
 
 
