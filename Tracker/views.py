@@ -38,7 +38,6 @@ class SearchView(ListView):
 
     def get_queryset(self): 
         query = self.request.GET.get('q')
-        print(query)
         object_list = Item.objects.filter(
             Q(title__icontains=query)# | Q(category__title__icontains=query)
         )
