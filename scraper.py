@@ -8,7 +8,7 @@ from pathlib import Path
 from itertools import chain
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-MAX_THREADS = 30
+MAX_THREADS = 10
 content = []
 
 def parse_data(text):
