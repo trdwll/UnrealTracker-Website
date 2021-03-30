@@ -686,10 +686,6 @@ video {
   --tw-ring-shadow: 0 0 #0000;
 }
 
-.table-auto {
-  table-layout: auto;
-}
-
 .text-gray-500 {
   --tw-text-opacity: 1;
   color: rgba(107, 114, 128, var(--tw-text-opacity));

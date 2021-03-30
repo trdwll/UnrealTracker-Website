@@ -2,6 +2,8 @@
 import json
 from django import template
 
+from Tracker.models import Item
+
 register = template.Library()
 
 @register.filter(name='parsejson')
@@ -11,5 +13,6 @@ def parsejson(str, arg):
 
 
 @register.filter(name='haschangedprice')
-def haschangedprice(str):
+def haschangedprice(obj):
+
     return True

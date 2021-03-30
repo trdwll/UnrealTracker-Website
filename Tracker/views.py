@@ -4,6 +4,10 @@ from django.core.exceptions import PermissionDenied
 
 import json
 
+PREVIOUS_SALES = [
+    {'date_start': '', 'date_end': ''}
+]
+
 
 from .models import Item
 

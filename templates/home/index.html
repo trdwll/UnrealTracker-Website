@@ -3,29 +3,32 @@
 {% block title %}Home{% endblock %}
 {% block content %}
 
-Last updated: {{ page_obj.0.current_price.date }}
+Last updated: {% include 'last_updated.txt' %}
 <br />
-<strong>Legend:</strong>
+<strong>Legend: </strong>
 <ul>
     <li><i class="fas fa-siren-on"></i> = The product ha(s)d a different price within 7 days of a sale</li>
-    <li><i class="fas fa-smile"></i> = The product hasn't changed price</li>
-    <li><i class="fas fa-dollar-sign"></i> = Hover to view previous prices of the product</li>
+    <li><i class="fas fa-dollar-sign"></i> = The product has had previous prices</li>
 </ul>
 
 <br />
 <br />
+
 {% load json_tags %}
 <div class="flex flex-row flex-wrap mx-2">
     {% for item in page_obj  %}
     <div class="w-full sm:w-1/2 md:w-1/4 mb-4 px-2">
-        <a href="{% url 'product-view' item.slug %}"><img src="{{ item.image }}" style="width:200px" /></a>
-        <a href="https://www.unrealengine.com/marketplace/en-US/product/{{ item.slug }}" target="_blank">{{ item.title }}</a>
-        {{ item.current_price|parsejson:"price" }}
+        <a href="{% url 'product-view' item.slug %}"><img src="{{ item.image }}" /></a>
+        {% if item.has_changed_price_within_sale %}<i class="fas fa-siren-on"></i>{% endif %}
+        {% if item.has_previous_prices %}<i class="fas fa-dollar-sign"></i>{% endif %}
+        <ul>
+            <li><a href="https://www.unrealengine.com/marketplace/en-US/product/{{ item.slug }}">{{ item.title }}</a></li>
+            <li>{{ item.current_price|parsejson:"price" }}</li>
+        </ul>
 
     </div>
     {% endfor %}
 </div>
-
 
 
 <div class="pagination">
