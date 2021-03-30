@@ -3,11 +3,11 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 
-from Tracker.views import HomeView
+from Tracker.views import HomeView, ProductView
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home-view'),
-    path('api/', include('rest_framework.urls')),
+    path('product/<slug:slug>/', ProductView.as_view(), name='product-view'),
     path('admin/', admin.site.urls),
 ]
 

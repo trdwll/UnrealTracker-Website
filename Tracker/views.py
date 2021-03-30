@@ -2,6 +2,9 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404, redirec
 from django.views.generic import View, ListView
 from django.core.exceptions import PermissionDenied
 
+import json
+
+
 from .models import Item
 
 class HomeView(ListView):
@@ -10,6 +13,21 @@ class HomeView(ListView):
     context_object_name = 'items'
     paginate_by = 100
 
+
+class ProductView(View):
+    template_name = 'product/index.html'
+
+    def get(self, request, slug):
+        product = Item.objects.filter(slug=slug).first()
+        price_data = json.loads(product.current_price.replace('\'','"'))
+        price = price_data['price']
+        last_updated = price_data['date']
+        previous_prices = ''
+        if product.previous_prices:
+            previous_prices_data = product.previous_prices.replace('\'','"')
+            previous_prices = json.loads(previous_prices_data)
+
+        return render(request, self.template_name, {'product': product, 'price': price, 'last_updated': last_updated, 'previous_prices': previous_prices})
 
 
 def permission_denied_403(request, exception=None):

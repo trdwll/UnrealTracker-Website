@@ -1,0 +1,15 @@
+{% extends '_base.html' %}
+
+{% block title %}{{ product.title }}{% endblock %}
+{% block content %}
+{{ product.id }}
+Last Updated: {{ last_updated }}
+
+<p>Current Price: {{ price }}</p>
+<p>Previous Prices:</p>
+<ul>
+{% for x in previous_prices %}
+<li>{{ x.price }} | {{ x.date }}</li>
+{% endfor %}
+</ul>
+{% endblock %}

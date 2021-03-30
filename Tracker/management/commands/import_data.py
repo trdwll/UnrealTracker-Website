@@ -19,24 +19,42 @@ class Command(BaseCommand):
 
             # remove non-unique slugs
             d = {each['slug'] : each for each in jsondata}.values()
-
+            #x = {"title": "SteamBridge", "author": "TRDWLL", "image": "https://cdn1.epicgames.com/ue/product/Thumbnail/SteamBridge_thumb-284x284-0af782db1f80e468d8322d97ba384077.png?resize=1&w=300", "current_price": "9.99", "slug": "steambridge"}
+            
             for x in d:
                 title = x['title']
                 author = x['author']
                 image = x['image']
                 new_current_price = x['current_price']
                 slug = x['slug']
-                current_date = '' #TODO
+                current_date = datetime.datetime.now()
 
-                tmp_new_price = {"price": new_current_price, "date": str(datetime.datetime.now())}
-                
-                # if the new_current_price is different than the current_price in the db then add the new_current_price to the previous_prices and update the current_price with new_current_price
-                obj, created = Item.objects.get_or_create(title=title, author=author, current_price=tmp_new_price, image=image, slug=slug)
+                tmp_new_price = {"price": new_current_price, "date": str(current_date)}
+
+                obj, created = Item.objects.get_or_create(slug=slug)
                 if created:
-                    pass
-                    # cool it's a new object
-                else:
-                    # update the data
+                    obj.title=title 
+                    obj.author=author 
+                    obj.current_price=tmp_new_price 
+                    obj.image=image
                     obj.save()
+                else:
+                    db_current_price = json.loads(obj.current_price.replace('\'','"'))
+                    if new_current_price == db_current_price['price']:
+                        pass
+                    else:
+                        # print(f'the fresh price isn\'t the same as the one in the DB so lets add the db_current_price to the previous prices and update the current_price - {str(title)}')
 
+                        previous_prices = []
+                        if obj.previous_prices:
+                            previous_prices_data = obj.previous_prices.replace('\'','"')
+                            previous_prices = json.loads(previous_prices_data)
+                        previous_prices.append(db_current_price)
 
+                        # TODO: sort previous prices by date
+                        obj.previous_prices = sorted_previous_prices
+                        obj.current_price = tmp_new_price
+
+                        print(f'({str(title)}) tmp_new_price: {str(tmp_new_price)}')
+
+                        obj.save()

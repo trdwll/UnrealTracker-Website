@@ -14,39 +14,18 @@ Last updated: {{ page_obj.0.current_price.date }}
 
 <br />
 <br />
+{% load json_tags %}
 <div class="flex flex-row flex-wrap mx-2">
     {% for item in page_obj  %}
     <div class="w-full sm:w-1/2 md:w-1/4 mb-4 px-2">
-        <a href="https://www.unrealengine.com/marketplace/en-US/product/{{ item.slug }}" target="_blank"><img src="{{ item.image }}" style="width:200px" /></a>
-        <a href="https://www.unrealengine.com/marketplace/en-US/product/{{ item.slug }}" target="_blank">{{item.title}}</a>
-        {{ item.current_price }}
+        <a href="{% url 'product-view' item.slug %}"><img src="{{ item.image }}" style="width:200px" /></a>
+        <a href="https://www.unrealengine.com/marketplace/en-US/product/{{ item.slug }}" target="_blank">{{ item.title }}</a>
+        {{ item.current_price|parsejson:"price" }}
+        
     </div>
     {% endfor %}
 </div>
 
-<!-- <table class="table-auto">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Title</th>
-        <th>Current Price</th>
-        <th>Previous Prices</th>
-      </tr>
-    </thead>
-    <tbody>
-{% for item in page_obj  %}
-
-      <tr>
-          <td><a href="https://www.unrealengine.com/marketplace/en-US/product/{{ item.slug }}" target="_blank"><img src="{{ item.image }}" style="width:64px" /></a></td>
-          <td><a href="https://www.unrealengine.com/marketplace/en-US/product/{{ item.slug }}" target="_blank">{{item.title}}</a></td>
-        <td>{{ item.current_price}}</td>
-        <td>Previous Prices</td>
-      </tr>
-{% endfor %}
-
-
-    </tbody>
-  </table> -->
 
 
 <div class="pagination">
