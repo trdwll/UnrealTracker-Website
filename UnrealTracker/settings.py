@@ -40,9 +40,6 @@ INSTALLED_APPS = [
 
     'UnrealTracker',
     'Tracker',
-
-    # 3rd party
-    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -127,12 +124,3 @@ STATICFILES_DIRS = [
   #  '/var/www/mydomain.com/public_html/static/',
 ]
 # STATIC_ROOT = os.path.join(SITE_ROOT, "static")
-
-
-REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
-}
