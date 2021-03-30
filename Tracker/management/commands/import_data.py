@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = 'imports the data from the data.json file'
 
     def handle(self, *args, **options):
-        with open(f'{BASE_DIR}\data.json', 'r') as data_file:
+        with open(f'{BASE_DIR}/data.json', 'r') as data_file:
             jsondata = json.loads(data_file.read())
 
             # remove non-unique slugs
@@ -38,7 +38,7 @@ class Command(BaseCommand):
                     category_obj.slug = x['categoryslug']
                     category_obj.save()
 
-                obj, created = Item.objects.get_or_create(slug=slug)
+                obj, created = Item.objects.get_or_create(slug=slug, category=category_obj)
                 if created:
                     obj.title = title 
                     obj.category = category_obj
