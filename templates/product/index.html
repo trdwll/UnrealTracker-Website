@@ -4,7 +4,11 @@
 {% block content %}
 {{ product.id }}
 Last Updated: {{ last_updated }}
-
+<br />
+<br />
+<a class="link-no-opacity mx-auto w-64 text-center bg-blue-500 hover:bg-blue-700 text-white border border-blue-700 font-bold uppercase px-4 py-4 rounded outline-none focus:outline-none" href="https://www.unrealengine.com/marketplace/en-US/product/{{ product.slug }}" target="_blank">Unreal Marketplace</a>
+<br />
+<br />
 <p>Current Price: {{ price }}</p>
 <p>Previous Prices:</p>
 <ul>

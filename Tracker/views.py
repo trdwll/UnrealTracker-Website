@@ -1,12 +1,9 @@
 from django.shortcuts import render, get_object_or_404, get_list_or_404, redirect
 from django.views.generic import View, ListView
 from django.core.exceptions import PermissionDenied
+from django.db.models import Q 
 
 import json
-
-PREVIOUS_SALES = [
-    {'date_start': '', 'date_end': ''}
-]
 
 
 from .models import Item
@@ -32,6 +29,21 @@ class ProductView(View):
             previous_prices = json.loads(previous_prices_data)
 
         return render(request, self.template_name, {'product': product, 'price': price, 'last_updated': last_updated, 'previous_prices': previous_prices})
+
+
+class SearchView(ListView):
+    template_name = 'search/index.html'
+    context_object_name = 'items'
+    paginate_by = 100
+
+    def get_queryset(self): 
+        query = self.request.GET.get('q')
+        print(query)
+        object_list = Item.objects.filter(
+            Q(title__icontains=query)# | Q(category__title__icontains=query)
+        )
+        print(object_list)
+        return object_list
 
 
 def permission_denied_403(request, exception=None):
