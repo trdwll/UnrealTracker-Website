@@ -25,7 +25,7 @@ class Item(models.Model):
     current_price = models.CharField(max_length=2048)
     previous_prices = models.CharField(max_length=2048)
     # rating 
-    slug = models.SlugField(unique=True)
+    slug = models.CharField(max_length=256)
 
     def __str__(self):
         return f'{self.title}'

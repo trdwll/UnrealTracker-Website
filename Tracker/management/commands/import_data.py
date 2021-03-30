@@ -34,11 +34,11 @@ class Command(BaseCommand):
                 tmp_new_price = {"price": new_current_price, "date": str(current_date)}
 
                 category_obj, category_created = Category.objects.get_or_create(title=category)
-                obj, created = Item.objects.get_or_create(slug=slug, category=category_obj)
                 if category_created:
                     category_obj.slug = x['categoryslug']
                     category_obj.save()
 
+                obj, created = Item.objects.get_or_create(slug=slug)
                 if created:
                     obj.title = title 
                     obj.category = category_obj
