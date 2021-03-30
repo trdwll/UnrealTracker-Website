@@ -24,7 +24,6 @@ class Command(BaseCommand):
             for x in d:
                 title = x['title']
                 category = x['category']
-                print(category)
                 author = x['author']
                 image = x['image']
                 new_current_price = x['current_price']
