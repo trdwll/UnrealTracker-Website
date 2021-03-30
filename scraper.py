@@ -32,7 +32,7 @@ def download_url(url):
     images = [x['src'] for x in all_images]
     titles = [x.getText().replace('\'', '&#39;') for x in all_titles]
     authors = [x.getText().replace(chr(160),'') for x in all_authors]
-    slugs = [x['href'].replace('/marketplace/en-US/product/','') for x in all_titles]
+    slugs = [x['href'].split('/product/')[1] for x in all_titles]
 
     content.append([{'title': title, 'author': author, 'image': image, 'current_price': current_price, 'slug': slug} for title, author, image, current_price, slug in zip(titles, authors, images, prices, slugs)])
 

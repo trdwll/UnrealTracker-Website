@@ -7,7 +7,7 @@ Last updated: {{ page_obj.0.current_price.date }}
 <br />
 <strong>Legend:</strong>
 <ul>
-    <li><i class="fas fa-exclamation"></i> = The product ha(s)d a different price within 7 days of a sale</li>
+    <li><i class="fas fa-siren-on"></i> = The product ha(s)d a different price within 7 days of a sale</li>
     <li><i class="fas fa-smile"></i> = The product hasn't changed price</li>
     <li><i class="fas fa-dollar-sign"></i> = Hover to view previous prices of the product</li>
 </ul>
@@ -21,7 +21,7 @@ Last updated: {{ page_obj.0.current_price.date }}
         <a href="{% url 'product-view' item.slug %}"><img src="{{ item.image }}" style="width:200px" /></a>
         <a href="https://www.unrealengine.com/marketplace/en-US/product/{{ item.slug }}" target="_blank">{{ item.title }}</a>
         {{ item.current_price|parsejson:"price" }}
-        
+
     </div>
     {% endfor %}
 </div>

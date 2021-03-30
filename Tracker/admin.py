@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Item, Price
+from .models import Item
 
-admin.site.register(Item)
-admin.site.register(Price)
+class ItemAdmin(admin.ModelAdmin):
+    search_fields = ['title', 'author', 'slug']
+
+admin.site.register(Item, ItemAdmin)

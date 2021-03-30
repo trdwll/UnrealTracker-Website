@@ -52,7 +52,7 @@ class Command(BaseCommand):
                         previous_prices.append(db_current_price)
 
                         # TODO: sort previous prices by date
-                        obj.previous_prices = sorted_previous_prices
+                        obj.previous_prices = previous_prices
                         obj.current_price = tmp_new_price
 
                         print(f'({str(title)}) tmp_new_price: {str(tmp_new_price)}')
