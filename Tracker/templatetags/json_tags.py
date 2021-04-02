@@ -9,8 +9,11 @@ register = template.Library()
 
 @register.filter(name='parsejson')
 def parsejson(str, arg):
-    new_str = json.loads(str.replace('\'','"'))
-    return new_str[arg]
+    try:
+        new_str = json.loads(str.replace('\'','"'))
+        return new_str[arg]
+    except json.decoder.JSONDecodeError:
+        return ''
 
 
 # @register.filter(name='has_changed_price_within_sale')

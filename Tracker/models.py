@@ -33,16 +33,19 @@ class Item(models.Model):
     def has_changed_price_within_sale(self):
         if self.previous_prices:
             for psdate in PREVIOUS_SALES:
-                previous_prices = json.loads(self.previous_prices.replace('\'', '"'))
-                start_date = psdate['date_start']
-                end_date = psdate['date_end']
+                try:
+                    previous_prices = json.loads(self.previous_prices.replace('\'', '"'))
+                    start_date = psdate['date_start']
+                    end_date = psdate['date_end']
 
-                # check if the previous prices have changed within 7 days of a sale
-                for date in previous_prices:
-                    previous_date = date['date']
-                    result = process_time(parse(str(previous_date)), parse(start_date), parse(end_date))
-                    if result:
-                        return True
+                    # check if the previous prices have changed within 7 days of a sale
+                    for date in previous_prices:
+                        previous_date = date['date']
+                        result = process_time(parse(str(previous_date)), parse(start_date), parse(end_date))
+                        if result:
+                            return True
+                except json.decoder.JSONDecodeError:
+                    break
 
         return False
 

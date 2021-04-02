@@ -20,15 +20,19 @@ class ProductView(View):
 
     def get(self, request, slug):
         product = Item.objects.filter(slug=slug).first()
-        price_data = json.loads(product.current_price.replace('\'','"'))
-        price = price_data['price']
-        last_updated = price_data['date']
-        previous_prices = ''
-        if product.previous_prices:
-            previous_prices_data = product.previous_prices.replace('\'','"')
-            previous_prices = json.loads(previous_prices_data)
+        try:
+            price_data = json.loads(product.current_price.replace('\'','"'))
+            previous_prices = ''
+            price = price_data['price']
+            last_updated = price_data['date']
+            if product.previous_prices:
+                previous_prices_data = product.previous_prices.replace('\'','"')
+                previous_prices = json.loads(previous_prices_data)
 
-        return render(request, self.template_name, {'product': product, 'price': price, 'last_updated': last_updated, 'previous_prices': previous_prices})
+            data = {'product': product, 'price': price, 'last_updated': last_updated, 'previous_prices': previous_prices}
+        except json.decoder.JSONDecodeError:
+            data = {'product': product}
+        return render(request, self.template_name, data)
 
 
 class SearchView(ListView):
@@ -50,7 +54,7 @@ class DiffView(ListView):
     paginate_by = 100
 
     def get_queryset(self):
-        return Item.objects.exclude(previous_prices__exact='')
+        return Item.objects.exclude(previous_prices='')
 
 
 def permission_denied_403(request, exception=None):
