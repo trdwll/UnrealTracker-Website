@@ -1,15 +1,9 @@
 {% extends '_base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Diff{% endblock %}
 {% block content %}
-
-Last updated: {% include 'last_updated.txt' %}
 <br />
-<strong>Legend: </strong>
-<ul>
-    <li><i class="fas fa-siren-on"></i> = The product ha(s)d a different price within 7 days of a sale</li>
-    <li><i class="fas fa-dollar-sign"></i> = The product has had previous prices</li>
-</ul>
+<strong>These are products that have had different prices since we've added them to the site. </strong>
 
 <br />
 <br />
@@ -29,5 +23,5 @@ Last updated: {% include 'last_updated.txt' %}
     {% endfor %}
 </div>
 
-{% include '_pagination.html' %}
+  {% include '_pagination.html' %}
 {% endblock %}

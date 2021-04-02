@@ -3,10 +3,11 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 
-from Tracker.views import HomeView, ProductView, SearchView
+from Tracker.views import HomeView, ProductView, SearchView, DiffView
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home-view'),
+    path('diff/', DiffView.as_view(), name='diff-view'), # view all products that have a previous price
     path('product/<slug:slug>/', ProductView.as_view(), name='product-view'),
     path('search/', SearchView.as_view(), name='search-view'),
     path('admin/', admin.site.urls),

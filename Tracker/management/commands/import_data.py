@@ -43,7 +43,7 @@ class Command(BaseCommand):
                 item_obj = Item.objects.filter(slug=slug).first()
                 if item_obj:
                     # item exists so we need to update it
-                    #print(f'======== The item ({title}) exists so we\'re going to update it')
+                    print(f'======== The item ({title}) exists so we\'re going to update it')
                     item_obj.title=title
                     item_obj.author=author
                     item_obj.category=category_obj
@@ -55,7 +55,6 @@ class Command(BaseCommand):
                     item_obj.slug = slug
                     item_obj.save()
 
-                #print('poggers')
                 item_obj.current_price = tmp_new_price 
                 item_obj.image = image
 
@@ -63,7 +62,6 @@ class Command(BaseCommand):
                 if new_current_price == db_current_price['price']:
                     pass
                 else:
-                    print('================================================ updating an item item_object')
                     # print(f'the fresh price isn\'t the same as the one in the DB so lets add the db_current_price to the previous prices and update the current_price - {str(title)}')
 
                     previous_prices = []

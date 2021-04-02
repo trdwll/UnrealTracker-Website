@@ -44,6 +44,15 @@ class SearchView(ListView):
         return object_list
 
 
+class DiffView(ListView):
+    template_name = 'diff/index.html'
+    context_object_name = 'items'
+    paginate_by = 100
+
+    def get_queryset(self):
+        return Item.objects.exclude(previous_prices__exact='')
+
+
 def permission_denied_403(request, exception=None):
     return render(request, 'error_pages/403.html', status=403)
 

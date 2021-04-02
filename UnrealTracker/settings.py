@@ -25,7 +25,7 @@ SECRET_KEY = '%=-*el+9^dw96wledtmec54+ce@i(ji_f1@8ex61vua3pvs-+y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.unrealtracker.com','unrealtracker.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'www.unrealtracker.com', 'unrealtracker.com']
 
 
 # Application definition
