@@ -10,9 +10,18 @@ from .models import Item
 
 class HomeView(ListView):
     template_name = 'home/index.html'
-    queryset = Item.objects.all()
     context_object_name = 'items'
     paginate_by = 100
+
+    def get_queryset(self): 
+        query = self.request.GET.get('q')
+        whitelist = ['title']
+
+        if query in whitelist:
+            object_list = Item.objects.all().order_by(query)
+            return object_list
+
+        return Item.objects.all()
 
 
 class ProductView(View):

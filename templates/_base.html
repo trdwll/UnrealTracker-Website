@@ -1,19 +1,23 @@
-<!doctype html>
-<html class="no-js" lang="">
+<!DOCTYPE html>
+<html lang="en-US" class="{{ theme }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>UnrealTracker &bull; {% block title %}{% endblock %}</title>
 
-<head>
-  <meta charset="utf-8">
-  <title>{% block title %}{% endblock %}</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="UnrealTracker is a website that tracks changes on the Unreal Engine marketplace. Check if a product has had previous prices before purchasing.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/tailwind.min.css" integrity="sha512-paVHVRRhdoOu1nOXKnqDC1Vka0nh7FAmU3nsM4n2FKxOQTeF6crMdMfkVvEsuaOXZ6oEAVL5+wLbQcule/Xdag==" crossorigin="anonymous" />
-  <script src="https://kit.fontawesome.com/8fb8632095.js" crossorigin="anonymous"></script>
+        {% load static %}
+        <meta name="keywords" content="UnrealTracker, unreal engine, ue4, unreal engine 4, unreal, engine, game engine, epic games unreal engine, price check, tracker">
+        <meta name="twitter:description" content="UnrealTracker is a website that tracks changes on the Unreal Engine marketplace. Check if a product has had previous prices before purchasing.">
+
+        <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.4/tailwind.min.css" integrity="sha512-paVHVRRhdoOu1nOXKnqDC1Vka0nh7FAmU3nsM4n2FKxOQTeF6crMdMfkVvEsuaOXZ6oEAVL5+wLbQcule/Xdag==" crossorigin="anonymous" />
+        <script src="https://kit.fontawesome.com/8fb8632095.js" crossorigin="anonymous"></script>
+
+
+        {% block extrahead %}{% endblock %}
 </head>
 
 <body class="flex flex-col justify-between bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 leading-normal font-sans">
@@ -39,6 +43,8 @@
 </nav>
   <main role="main" class="mt-8 flex-auto container mx-auto px-6 bg-white dark:bg-black rounded-lg pt-12">
     
+    <div><strong>This website is under active development so the design isn't finished.</strong></div>
+
     {% block content %}default content{% endblock %}
 
     {% include '_footer.html' %}
