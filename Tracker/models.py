@@ -5,9 +5,7 @@ from dateutil.parser import parse
 from .utils import process_time
 
 PREVIOUS_SALES = [
-    {"date_start": "2021-03-30 10:00:00", "date_end": "2021-04-10 23:59:59"},
-    {"date_start": "2021-03-20 10:00:00", "date_end": "2021-03-29 23:59:59"},
-    {"date_start": "2021-01-15 10:00:00", "date_end": "2021-01-20 23:59:59"}
+   # {"date_start": "2021-01-15 10:00:00", "date_end": "2021-01-20 23:59:59"}
 ]
 
 class Category(models.Model):
