@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 import json, datetime
 from dateutil.parser import parse
 
@@ -27,6 +28,9 @@ class Item(models.Model):
 
     def __str__(self):
         return f'{self.title}'
+
+    def get_absolute_url(self):
+        return reverse('product-view', kwargs={'slug': self.slug })
 
     def has_changed_price_within_sale(self):
         if self.previous_prices:

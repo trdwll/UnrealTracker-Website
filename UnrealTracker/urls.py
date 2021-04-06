@@ -2,8 +2,28 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
+from django.contrib import sitemaps
+from django.contrib.sitemaps import GenericSitemap
+from django.contrib.sitemaps.views import sitemap
 
 from Tracker.views import HomeView, ProductView, SearchView, DiffView
+from Tracker.models import Item
+
+class StaticViewSitemap(sitemaps.Sitemap):
+    priority = 0.7
+    changefreq = 'daily'
+
+    def items(self):
+        return ['']
+
+    def location(self, item):
+        return item
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'products': GenericSitemap({'queryset': Item.objects.all()}, priority=0.6),
+}
+
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home-view'),
@@ -11,6 +31,7 @@ urlpatterns = [
     path('product/<slug:slug>/', ProductView.as_view(), name='product-view'),
     path('search/', SearchView.as_view(), name='search-view'),
     path('admin/', admin.site.urls),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
 if settings.DEBUG:
