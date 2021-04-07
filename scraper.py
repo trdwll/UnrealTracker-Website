@@ -1,5 +1,4 @@
 import re, json, time, random, datetime
-from bs4 import BeautifulSoup
 import concurrent.futures
 from urllib.request import urlopen
 import urllib.parse as urlparse
@@ -12,33 +11,21 @@ MAX_THREADS = 10
 content = []
 
 def parse_data(text):
-    soup = BeautifulSoup(text, 'html.parser')
-    all_content = soup.find_all('div', {'class': 'asset-container catalog asset-full'})
-    all_images = soup.find_all('img')
-    all_prices = soup.find_all('span', {'class': 'asset-price'})
-    all_titles = soup.find_all('a', {'class': 'mock-ellipsis-item mock-ellipsis-item-helper ellipsis-text'})
-    all_authors = soup.find_all('div', {'class': 'creator ellipsis'})
-    all_categories = soup.find_all('a', {'class': 'mock-ellipsis-item-cat'})
+    json_data = json.loads(text)
 
-    prices = []
-    for price in all_prices:
-        cur_price = re.search('((\$[0-9]+(\.[0-9]{2})?))', str(price))
-        if cur_price == None:
-            prices.append('Free')
+    for x in json_data["data"]["elements"]:
+        if x["priceValue"] > 0:
+            current_price = x["price"] if x["priceValue"] == x["discountPriceValue"] else x["discountPrice"] # tbh the logic here is flawed as hell lol. discount should only be set if there's a discount Epic wtf
+            has_discount = x["priceValue"] != x["discountPriceValue"]
         else:
-            prices.append(str(cur_price.group()))
-
-    images = [x['src'] for x in all_images]
-    titles = [x.getText().replace('\'', '&#39;') for x in all_titles]
-    authors = [x.getText().replace(chr(160),'') for x in all_authors]
-    slugs = [x['href'].split('/product/')[1] for x in all_titles]
-    categories = [x.getText() for x in all_categories]
-    categories_slugs = [x['href'].split('/assets/')[1] for x in all_categories]
-
-    content.append([
-        {'title': title, 'category': category, 'categoryslug': category_slug, 'author': author, 'image': image, 'current_price': current_price, 'slug': slug} 
-            for title, category, category_slug, author, image, current_price, slug in zip(titles, categories, categories_slugs, authors, images, prices, slugs)
-        ])
+            current_price = "Free"
+            has_discount = False
+        category_slug = x["categories"][0]["path"].split('assets/')[1]
+        content.append([
+        {
+            "title": x["title"], "category": x["categories"][0]["name"], "categoryslug": category_slug, "author": x["seller"]["name"], 
+            "image": x["thumbnail"], "current_price": current_price, "current_price_discounted": has_discount, "slug": x["urlSlug"]
+        }])
 
 def download_url(url):
     resp = urlopen(url).read()
@@ -76,20 +63,17 @@ def main(store_urls):
 
 urls = []
 def gather_urls():
-    text = urlopen('https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=0').read()
-    soup = BeautifulSoup(text, 'html.parser')
-    amount_content = soup.find('li', attrs={'class': 'rc-pagination-total-text'})
-    amount = re.search('([0-9]{5})', str(amount_content)).group(1)
+    text = json.loads(urlopen('https://www.unrealengine.com/marketplace/api/assets').read())
+    amount = text["data"]["paging"]["total"]
     amount_of_pages = int(amount) / 100 + 1
 
     for i in range(int(amount_of_pages)):
         start = i * 100
-        urls.append('https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start={}'.format(start))
+        urls.append('https://www.unrealengine.com/marketplace/api/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start={}'.format(start))
 
 
 gather_urls()
 main(urls)
-# main(['https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=0', 'https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=100'])
 
 
 
@@ -98,7 +82,7 @@ main(urls)
 
 # this below is used to test the data that comes in on 1 page to avoid doing a ton of requests when testing
 
-# text = urlopen('https://www.unrealengine.com/marketplace/en-US/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=0').read()
+# text = urlopen('https://www.unrealengine.com/marketplace/api/assets?count=100&sortBy=effectiveDate&sortDir=DESC&start=0').read()
 # parse_data(text)
 
 # new_content = list(chain.from_iterable(content))
