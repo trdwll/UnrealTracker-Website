@@ -13,7 +13,7 @@ Last Updated: {{ last_updated }}
 <p>Previous Prices:</p>
 <ul>
 {% for x in previous_prices %}
-<li>{{ x.price }} | {{ x.date }}</li>
+<li>{{ x.price }} | {{ x.date }} | Discounted: {{ x.discounted }}</li>
 {% endfor %}
 </ul>
 {% endblock %}

@@ -21,7 +21,7 @@ class HomeView(ListView):
             object_list = Item.objects.all().order_by(query)
             return object_list
 
-        return Item.objects.all()
+        return Item.objects.all().order_by('-id')
 
 
 class ProductView(View):
@@ -30,17 +30,22 @@ class ProductView(View):
     def get(self, request, slug):
         product = Item.objects.filter(slug=slug).first()
         try:
-            price_data = json.loads(product.current_price.replace('\'','"'))
+            price_data = json.loads(product.current_price.replace('\'','"').replace('False', 'false'))
             previous_prices = ''
-            price = price_data['price']
-            last_updated = price_data['date']
-            if product.previous_prices:
-                previous_prices_data = product.previous_prices.replace('\'','"')
-                previous_prices = json.loads(previous_prices_data)
+            price = price_data["price"]
+            last_updated = price_data["date"]
+            if product.previous_prices != '':
+                try:
+                    previous_prices_data = product.previous_prices.replace('\'','"').replace('False', 'false')
+                    previous_prices = json.loads(previous_prices_data)
+                except json.decoder.JSONDecodeError as ex:
+                    print('ProductView1', ex)
 
             data = {'product': product, 'price': price, 'last_updated': last_updated, 'previous_prices': previous_prices}
-        except json.decoder.JSONDecodeError:
+        except json.decoder.JSONDecodeError as ex:
             data = {'product': product}
+            print('ProductView2', ex)
+
         return render(request, self.template_name, data)
 
 

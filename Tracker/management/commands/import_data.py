@@ -17,7 +17,7 @@ class Command(BaseCommand):
 
             # remove non-unique slugs
             d = {each['slug'] : each for each in jsondata}.values()
-            # d = [{"title": "SteamBridge", "category": "Code Plugins", "categoryslug": "codeplugins", "author": "TRDWLL", "image": "https://cdn1.epicgames.com/ue/product/Thumbnail/SteamBridge_thumb-284x284-0af782db1f80e468d8322d97ba384077.png", "current_price": "Free", "current_price_discounted": False, "slug": "steambridge"}]
+            #d = [{"title": "SteamBridge", "category": "Code Plugins", "categoryslug": "codeplugins", "author": "TRDWLL", "image": "https://cdn1.epicgames.com/ue/product/Thumbnail/SteamBridge_thumb-284x284-0af782db1f80e468d8322d97ba384077.png", "current_price": "1.99", "current_price_discounted": False, "slug": "steambridge"}]
             
             i = 0
             for x in d:
@@ -51,23 +51,31 @@ class Command(BaseCommand):
                     item_obj.image = image
                     item_obj.save()
                     continue
+                
+                try:
+                    db_current_price = json.loads(item_obj.current_price.replace('\'','"').replace('False', 'false'))
+                    if new_current_price == db_current_price['price'] or x["current_price_discounted"]: 
+                        continue
+                    else:
+                        try:
+                            previous_prices = []
+                            if item_obj.previous_prices:
+                                previous_prices_data = item_obj.previous_prices.replace('\'','"').replace('False', 'false')
+                                previous_prices = json.loads(previous_prices_data)
+                            previous_prices.append(db_current_price)
 
-                db_current_price = json.loads(str(item_obj.current_price).replace('\'','"'))
-                if new_current_price == db_current_price['price'] or x["current_price_discounted"]:
-                    continue
-                else:
-                    previous_prices = []
-                    if item_obj.previous_prices:
-                        previous_prices_data = item_obj.previous_prices.replace('\'','"')
-                        previous_prices = json.loads(previous_prices_data)
-                    previous_prices.append(db_current_price)
+                            # TODO: sort previous prices by date
+                            item_obj.previous_prices = previous_prices
 
-                    # TODO: sort previous prices by date
-                    item_obj.previous_prices = previous_prices
-                    item_obj.current_price = tmp_new_price
+                        except json.decoder.JSONDecodeError as ex:
+                            print('Loop error', ex)
 
-                    # TODO: The author is able to change the category so we should probably set it here also
+                        item_obj.current_price = tmp_new_price
 
-                    print(f'({str(title)}) tmp_new_price: {str(tmp_new_price)}')
+                        # TODO: The author is able to change the category so we should probably set it here also
 
-                    item_obj.save()
+                        print(f'({str(title)}) tmp_new_price: {str(tmp_new_price)}')
+
+                        item_obj.save()
+                except json.decoder.JSONDecodeError as ex:
+                    print('End Loop', ex)
