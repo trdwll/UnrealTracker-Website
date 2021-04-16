@@ -1,9 +1,0 @@
-write a scraper to pull the following data from the unreal marketplace
-- title
-- picture
-- price
-- reviews
-- rating
-- author
-
-https://docs.google.com/spreadsheets/d/1a-sJ0cvmgSiXToD1GxjCED6e1993ZytTB5oAZ9bb8YM/edit#gid=1114449252
