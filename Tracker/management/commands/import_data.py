@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 def download_file(url, resource):
     file_name = Path(url).name
-    name = f'{BASE_DIR}\\static\\thumbs\\{file_name}'
+    name = f'{BASE_DIR}/static/thumbs/{file_name}'
     with open(name, "wb") as fiel:
         fiel.write(resource.read())
         # img = Image.open(name)
@@ -109,7 +109,7 @@ class Command(BaseCommand):
                     print('End Loop', ex)
 
         # download last 100 images and update them in the db (caching)
-        items = Item.objects.all().order_by('-id')[:3]
+        items = Item.objects.all().order_by('-id')[:100]
         urls = []
         for x in items:
             urls.append(x.image)
