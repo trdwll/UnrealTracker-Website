@@ -8,7 +8,6 @@ from urllib.request import urlopen
 import urllib.parse as urlparse
 from urllib.parse import parse_qs
 from pathlib import Path
-import requests
 
 # Pillow isn't supported by FreeBSD without ports and I cba to install ports
 #from PIL import Image
