@@ -3,3 +3,4 @@ django-htmlmin
 bcrypt
 python-dateutil
 uwsgi
+Pillow

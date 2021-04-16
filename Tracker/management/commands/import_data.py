@@ -2,14 +2,42 @@ from django.core.management.base import BaseCommand, CommandError
 
 from Tracker.models import Item, Category
 
+import os, json, time, random, datetime
+import concurrent.futures
+from urllib.request import urlopen
+import urllib.parse as urlparse
+from urllib.parse import parse_qs
 from pathlib import Path
-import os, json, datetime
+import requests
+
+from PIL import Image
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
+def download_file(url, resource):
+    file_name = Path(url).name
+    name = f'{BASE_DIR}\\static\\thumbs\\{file_name}'
+    with open(name, "wb") as fiel:
+        fiel.write(resource.read())
+        img = Image.open(name)
+        img.save(name, optimize=True, quality=85)
+        img.close()
+
+def download_url(url):
+    resource = urlopen(url)
+    download_file(url, resource)
+    time.sleep(random.uniform(1.0, 3.0))
+
+def download_items(image_urls):
+    threads = min(10, len(image_urls))
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+        executor.map(download_url, image_urls)
+
 class Command(BaseCommand):
     help = 'imports the data from the data.json file'
+
 
     def handle(self, *args, **options):
         with open(f'{BASE_DIR}/data.json', 'r') as data_file:
@@ -79,3 +107,15 @@ class Command(BaseCommand):
                         item_obj.save()
                 except json.decoder.JSONDecodeError as ex:
                     print('End Loop', ex)
+
+        # download last 100 images and update them in the db (caching)
+        items = Item.objects.all().order_by('-id')[:3]
+        urls = []
+        for x in items:
+            urls.append(x.image)
+            name = Path(x.image).name
+            x.image = f'https://unrealtracker.com/static/thumbs/{name}'
+            x.save()
+
+            
+        download_items(urls)
