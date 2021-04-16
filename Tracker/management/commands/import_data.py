@@ -10,7 +10,8 @@ from urllib.parse import parse_qs
 from pathlib import Path
 import requests
 
-from PIL import Image
+# Pillow isn't supported by FreeBSD without ports and I cba to install ports
+#from PIL import Image
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
@@ -20,9 +21,9 @@ def download_file(url, resource):
     name = f'{BASE_DIR}\\static\\thumbs\\{file_name}'
     with open(name, "wb") as fiel:
         fiel.write(resource.read())
-        img = Image.open(name)
-        img.save(name, optimize=True, quality=85)
-        img.close()
+        # img = Image.open(name)
+        # img.save(name, optimize=True, quality=85)
+        # img.close()
 
 def download_url(url):
     resource = urlopen(url)
