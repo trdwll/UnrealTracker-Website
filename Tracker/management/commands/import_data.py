@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent.parent
 
 def download_file(url, resource):
     file_name = Path(url).name
-    name = f'{BASE_DIR}/static/thumbs/{file_name}'
+    name = f'{os.path.join(BASE_DIR, os.path.join("static", "thumbs"))}/{file_name}'
     with open(name, "wb") as fiel:
         fiel.write(resource.read())
         # img = Image.open(name)
