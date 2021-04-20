@@ -51,12 +51,12 @@ class Command(BaseCommand):
             for x in d:
                 i += 1
                 print(i)
-                title = x['title']
-                category = x['category']
-                author = x['author']
-                image = x['image']
-                new_current_price = x['current_price']
-                slug = x['slug']
+                title = x["title"]
+                category = x["category"]
+                author = x["author"]
+                image = x["image"]
+                new_current_price = x["current_price"]
+                slug = x["slug"]
                 current_date = datetime.datetime.now()
                 tmp_new_price = {"price": new_current_price, "date": str(current_date), "discounted": x["current_price_discounted"]}
 
@@ -69,6 +69,7 @@ class Command(BaseCommand):
                     item_obj.author = author
                     item_obj.image = image
                     item_obj.category = category_obj
+                    item_obj.ratings = x["rating_data"]
                     item_obj.save()
                 else:
                     # item doesn't exist so lets create it
@@ -77,6 +78,7 @@ class Command(BaseCommand):
                     item_obj.slug = slug
                     item_obj.current_price = tmp_new_price 
                     item_obj.image = image
+                    item_obj.ratings = x["rating_data"]
                     item_obj.save()
                     continue
                 

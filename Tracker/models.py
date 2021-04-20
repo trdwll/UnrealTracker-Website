@@ -23,7 +23,7 @@ class Item(models.Model):
     image = models.URLField()
     current_price = models.CharField(max_length=2048)
     previous_prices = models.CharField(max_length=2048)
-    # rating 
+    ratings = models.CharField(max_length=1024, default='', blank=True)
     slug = models.SlugField(unique=True, max_length=250)
 
     def __str__(self):
@@ -52,5 +52,5 @@ class Item(models.Model):
         return False
 
     def has_previous_prices(self):
-        return self.previous_prices is not ''
+        return self.previous_prices != ''
 

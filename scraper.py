@@ -20,11 +20,15 @@ def parse_data(text):
         else:
             current_price = "Free"
             has_discount = False
+
+        rating_json_data = json.loads(urlopen(f'https://www.unrealengine.com/marketplace/api/review/{x["id"]}/ratings/').read())
+
         category_slug = x["categories"][0]["path"].split('assets/')[1]
         content.append([
         {
             "title": x["title"], "category": x["categories"][0]["name"], "categoryslug": category_slug, "author": x["seller"]["name"], 
-            "image": x["thumbnail"], "current_price": current_price, "current_price_discounted": has_discount, "slug": x["urlSlug"]
+            "image": x["thumbnail"], "current_price": current_price, "current_price_discounted": has_discount, "slug": x["urlSlug"],
+            "rating_data": rating_json_data["data"]
         }])
 
 def download_url(url):
